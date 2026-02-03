@@ -1,0 +1,16 @@
+{
+  "name": "fullstack-project",
+  "version": "1.0.0",
+  "description": "A fullstack project with Express backend and a beautiful landing page",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["express", "fullstack", "landing-page"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
