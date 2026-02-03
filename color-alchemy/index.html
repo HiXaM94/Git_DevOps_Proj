@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Color Alchemy – Palette Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1>Color Alchemy</h1>
+        <p class="subtitle">
+          Pick a base color and let HSL color theory generate its complementary,
+          triadic, and analogous palette.
+        </p>
+      </header>
+
+      <section class="controls">
+        <label class="base-picker">
+          <span>Base color</span>
+          <input id="baseColor" type="color" value="#4f46e5" />
+        </label>
+        <div class="hsl-readout">
+          <span id="hslText">HSL: –</span>
+        </div>
+      </section>
+
+      <section class="palettes">
+        <article class="group">
+          <h2>Complementary</h2>
+          <div class="swatches">
+            <div class="swatch" data-role="base-complementary">
+              <span class="label">Base</span>
+              <div class="codes">
+                <span class="code" data-format="hsl"></span>
+                <span class="code" data-format="rgb"></span>
+                <span class="code" data-format="hex"></span>
+              </div>
+            </div>
+            <div class="swatch" data-role="complementary">
+              <span class="label">Complementary</span>
+              <div class="codes">
+                <span class="code" data-format="hsl"></span>
+                <span class="code" data-format="rgb"></span>
+                <span class="code" data-format="hex"></span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="group">
+          <h2>Triadic</h2>
+          <div class="swatches">
+            <div class="swatch" data-role="triad-1">
+              <span class="label">Triad 1</span>
+              <span class="code" data-code="triad1"></span>
+            </div>
+            <div class="swatch" data-role="base-triad">
+              <span class="label">Base</span>
+              <span class="code" data-code="base2"></span>
+            </div>
+            <div class="swatch" data-role="triad-2">
+              <span class="label">Triad 2</span>
+              <span class="code" data-code="triad2"></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="group">
+          <h2>Analogous</h2>
+          <div class="swatches">
+            <div class="swatch" data-role="analogous-1">
+              <span class="label">Analog −30°</span>
+              <div class="codes">
+                <span class="code" data-format="hsl"></span>
+                <span class="code" data-format="rgb"></span>
+                <span class="code" data-format="hex"></span>
+              </div>
+            </div>
+            <div class="swatch" data-role="base-analogous">
+              <span class="label">Base</span>
+              <div class="codes">
+                <span class="code" data-format="hsl"></span>
+                <span class="code" data-format="rgb"></span>
+                <span class="code" data-format="hex"></span>
+              </div>
+            </div>
+            <div class="swatch" data-role="analogous-2">
+              <span class="label">Analog +30°</span>
+              <div class="codes">
+                <span class="code" data-format="hsl"></span>
+                <span class="code" data-format="rgb"></span>
+                <span class="code" data-format="hex"></span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <footer class="footer">
+        <p>
+          Built with <code>HSL(h, s, l)</code> math in JavaScript. Complementary
+          uses <code>h + 180°</code>, triadic uses <code>h ± 120°</code>,
+          analogous uses <code>h ± 30°</code>.
+        </p>
+      </footer>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+  </html>
+
