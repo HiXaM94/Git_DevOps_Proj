@@ -1,0 +1,147 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Job 1: Vérification du code
+  code-quality:
+    runs-on: ubuntu-latest
+    name: Code Quality Check
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Check for trailing whitespace
+        run: |
+          if git diff --check HEAD^ HEAD; then
+            echo "✅ No trailing whitespace found"
+          else
+            echo "❌ Trailing whitespace detected"
+            exit 1
+          fi
+      
+      - name: Check file sizes
+        run: |
+          find . -type f -size +10M -not -path "./.git/*" | while read file; do
+            echo "⚠️  Large file detected: $file"
+          done
+
+  # Job 2: Validation HTML/CSS (si applicable)
+  validate-html:
+    runs-on: ubuntu-latest
+    name: HTML/CSS Validation
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Check for HTML files
+        id: check-html
+        run: |
+          if find . -name "*.html" -not -path "./node_modules/*" | grep -q .; then
+            echo "has_html=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_html=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Validate HTML
+        if: steps.check-html.outputs.has_html == 'true'
+        uses: Cyb3r-Jak3/html5validator-action@v7.2.0
+        with:
+          root: ./
+          css: true
+
+  # Job 3: Node.js CI (si package.json existe)
+  nodejs-ci:
+    runs-on: ubuntu-latest
+    name: Node.js Build & Test
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Check for package.json
+        id: check-nodejs
+        run: |
+          if [ -f "package.json" ]; then
+            echo "has_nodejs=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_nodejs=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        if: steps.check-nodejs.outputs.has_nodejs == 'true'
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        if: steps.check-nodejs.outputs.has_nodejs == 'true'
+        run: npm ci
+      
+      - name: Run linter
+        if: steps.check-nodejs.outputs.has_nodejs == 'true'
+        run: npm run lint --if-present
+        continue-on-error: true
+      
+      - name: Run tests
+        if: steps.check-nodejs.outputs.has_nodejs == 'true'
+        run: npm test --if-present
+      
+      - name: Build project
+        if: steps.check-nodejs.outputs.has_nodejs == 'true'
+        run: npm run build --if-present
+      
+      - name: Upload coverage
+        if: steps.check-nodejs.outputs.has_nodejs == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-${{ matrix.node-version }}
+          path: coverage/
+          retention-days: 7
+
+  # Job 4: Security scan
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scan
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # Job 5: Notification de succès
+  notify-success:
+    runs-on: ubuntu-latest
+    name: Notify Success
+    needs: [code-quality, validate-html, nodejs-ci, security-scan]
+    if: success()
+    
+    steps:
+      - name: Success notification
+        run: |
+          echo "✅ All CI checks passed successfully!"
+          echo "📦 Build is ready for deployment"
