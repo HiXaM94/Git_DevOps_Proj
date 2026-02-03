@@ -1,0 +1,32 @@
+{
+  "productName": "My Sneakers",
+  "targetPrice": 350,
+  "currency": "MAD",
+  "sites": [
+    {
+      "name": "Decathlon",
+      "url": "https://www.decathlon.ma/...",
+      "type": "decathlon"
+    },
+    {
+      "name": "LC Waikiki",
+      "url": "https://www.lcwaikiki.ma/en-...",
+      "type": "lcwaikiki"
+    },
+    {
+      "name": "FLO",
+      "url": "https://www.flo.com.tr/...",
+      "type": "flo"
+    }
+  ],
+  "telegram": {
+    "enabled": false,
+    "botToken": "YOUR_TELEGRAM_BOT_TOKEN",
+    "chatId": "YOUR_CHAT_ID"
+  },
+  "discord": {
+    "enabled": false,
+    "webhookUrl": "YOUR_DISCORD_WEBHOOK_URL"
+  },
+  "checkIntervalCron": "*/15 * * * *"
+}
