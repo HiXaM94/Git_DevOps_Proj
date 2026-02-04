@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body class="dashboard-page">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-chart-line"></i>
+            <h2>Nexus</h2>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i> Users
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-shopping-cart"></i> Orders
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="logout-btn" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>Dashboard</h1>
+                <p id="current-date"></p>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="user-name">Loading...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-details">
+                    <h3 id="total-users">0</h3>
+                    <p>Total Users</p>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 12% from last month
+                    </span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-details">
+                    <h3 id="total-revenue">$0</h3>
+                    <p>Total Revenue</p>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 8% from last month
+                    </span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-details">
+                    <h3 id="total-orders">0</h3>
+                    <p>Total Orders</p>
+                    <span class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 15% from last month
+                    </span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="stat-details">
+                    <h3 id="active-users">0</h3>
+                    <p>Active Users</p>
+                    <span class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i> 3% from last month
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="chart-section">
+            <div class="chart-card">
+                <h2>Revenue & Orders Overview</h2>
+                <canvas id="statsChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Recent Activities -->
+        <section class="activities-section">
+            <h2>Recent Activities</h2>
+            <div class="activities-list" id="activities-list">
+                <p class="loading">Loading activities...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script src="js/charts.js"></script>
+</body>
+
+</html>

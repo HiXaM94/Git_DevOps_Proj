@@ -1,0 +1,82 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "Admin User",
+            "email": "admin@nexus.com",
+            "password": "$2a$10$0kjZwmCWyCZPTUULL6RU6ueLgw4Q.Fi.i4eI/4uWaKan/yJbc0wpO",
+            "role": "admin",
+            "createdAt": "2026-01-01T00:00:00.000Z"
+        },
+        {
+            "id": 2,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "password": "$2a$10$8K1p/a0dL3.I8.F9.Fz.2eKRqYjXkQXvuQXqA5vKZqYjXkQXvuQXq",
+            "role": "user",
+            "createdAt": "2026-01-15T10:30:00.000Z"
+        }
+    ],
+    "stats": {
+        "totalUsers": 1247,
+        "totalRevenue": 89543.50,
+        "totalOrders": 3421,
+        "activeUsers": 892
+    },
+    "chartData": {
+        "labels": [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun"
+        ],
+        "revenue": [
+            12500,
+            19000,
+            15000,
+            22000,
+            28000,
+            35000
+        ],
+        "orders": [
+            145,
+            198,
+            167,
+            234,
+            289,
+            342
+        ]
+    },
+    "recentActivities": [
+        {
+            "id": 1,
+            "user": "Alice Johnson",
+            "action": "Placed an order",
+            "amount": "$234.50",
+            "timestamp": "2026-02-04T01:30:00.000Z"
+        },
+        {
+            "id": 2,
+            "user": "Bob Smith",
+            "action": "Updated profile",
+            "amount": null,
+            "timestamp": "2026-02-04T00:45:00.000Z"
+        },
+        {
+            "id": 3,
+            "user": "Carol White",
+            "action": "Placed an order",
+            "amount": "$89.99",
+            "timestamp": "2026-02-03T23:15:00.000Z"
+        },
+        {
+            "id": 4,
+            "user": "David Brown",
+            "action": "Registered",
+            "amount": null,
+            "timestamp": "2026-02-03T22:00:00.000Z"
+        }
+    ]
+}

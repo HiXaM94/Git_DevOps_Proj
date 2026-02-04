@@ -1,0 +1,123 @@
+
+> nexus-dashboard-backend@1.0.0 test
+> jest --coverage
+
+FAIL tests/api.test.js
+  API Tests
+    Auth Endpoints
+      × POST /api/auth/login - should login with valid credentials (206 ms)
+      √ POST /api/auth/login - should fail with invalid credentials (125 ms)
+      √ POST /api/auth/login - should fail with missing fields (7 ms)
+      √ POST /api/auth/register - should register new user (120 ms)
+      × GET /api/auth/verify - should verify valid token (117 ms)
+    Stats Endpoints
+      × GET /api/stats - should return stats with valid token (5 ms)
+      √ GET /api/stats - should fail without token (5 ms)
+      × GET /api/stats/chart - should return chart data with valid token (6 ms)
+      × GET /api/stats/recent - should return recent activities (5 ms)
+    Server Endpoints
+      √ GET / - should return API info (5 ms)
+      √ GET /nonexistent - should return 404 (5 ms)
+
+  ● API Tests › Auth Endpoints › POST /api/auth/login - should login with valid credentials
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      14 |                 });
+      15 |
+    > 16 |             expect(response.status).toBe(200);
+         |                                     ^
+      17 |             expect(response.body).toHaveProperty('token');
+      18 |             expect(response.body).toHaveProperty('user');
+      19 |             expect(response.body.user.email).toBe('admin@nexus.com');
+
+      at Object.toBe (tests/api.test.js:16:37)
+
+  ● API Tests › Auth Endpoints › GET /api/auth/verify - should verify valid token
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      75 |                 .set('Authorization', `Bearer ${token}`);
+      76 |
+    > 77 |             expect(response.status).toBe(200);
+         |                                     ^
+      78 |             expect(response.body.valid).toBe(true);
+      79 |         });
+      80 |     });
+
+      at Object.toBe (tests/api.test.js:77:37)
+
+  ● API Tests › Stats Endpoints › GET /api/stats - should return stats with valid token
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+       97 |                 .set('Authorization', `Bearer ${authToken}`);
+       98 |
+    >  99 |             expect(response.status).toBe(200);
+          |                                     ^
+      100 |             expect(response.body).toHaveProperty('totalUsers');
+      101 |             expect(response.body).toHaveProperty('totalRevenue');
+      102 |             expect(response.body).toHaveProperty('totalOrders');
+
+      at Object.toBe (tests/api.test.js:99:37)
+
+  ● API Tests › Stats Endpoints › GET /api/stats/chart - should return chart data with valid token
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      116 |                 .set('Authorization', `Bearer ${authToken}`);
+      117 |
+    > 118 |             expect(response.status).toBe(200);
+          |                                     ^
+      119 |             expect(response.body).toHaveProperty('labels');
+      120 |             expect(response.body).toHaveProperty('datasets');
+      121 |             expect(Array.isArray(response.body.labels)).toBe(true);
+
+      at Object.toBe (tests/api.test.js:118:37)
+
+  ● API Tests › Stats Endpoints › GET /api/stats/recent - should return recent activities
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 401
+
+      127 |                 .set('Authorization', `Bearer ${authToken}`);
+      128 |
+    > 129 |             expect(response.status).toBe(200);
+          |                                     ^
+      130 |             expect(response.body).toHaveProperty('activities');
+      131 |             expect(Array.isArray(response.body.activities)).toBe(true);
+      132 |         });
+
+      at Object.toBe (tests/api.test.js:129:37)
+
+--------------------|---------|----------|---------|---------|-----------------------
+File                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s     
+--------------------|---------|----------|---------|---------|-----------------------
+All files           |   81.11 |    63.63 |   61.53 |   80.68 |                       
+ backend            |   82.75 |       30 |      50 |   82.75 |                       
+  server.js         |   82.75 |       30 |      50 |   82.75 | 48-49,62-64           
+ backend/middleware |   81.81 |      100 |     100 |   81.81 |                       
+  auth.js           |   81.81 |      100 |     100 |   81.81 | 14-15                 
+ backend/routes     |      80 |    73.68 |    62.5 |   79.16 |                       
+  auth.js           |   82.05 |    73.68 |     100 |   81.08 | 19,30-41,58,65,97,104 
+  stats.js          |   72.72 |      100 |       0 |   72.72 | 8,19,40               
+--------------------|---------|----------|---------|---------|-----------------------
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 6 passed, 11 total
+Snapshots:   0 total
+Time:        2.049 s, estimated 3 s
+Ran all test suites.

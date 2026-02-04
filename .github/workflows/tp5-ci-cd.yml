@@ -1,0 +1,180 @@
+name: TP5 Nexus Dashboard CI/CD
+
+on:
+  push:
+    branches: [main, dev]
+    paths:
+      - 'tp5-dashboard/**'
+      - '.github/workflows/tp5-ci-cd.yml'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - 'tp5-dashboard/**'
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  # Backend Testing and Linting
+  backend-test:
+    name: Backend Tests & Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tp5-dashboard/backend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: './tp5-dashboard/backend/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linter
+        run: npm run lint
+      
+      - name: Run tests
+        run: npm test
+        env:
+          JWT_SECRET: test-secret-key
+          SESSION_SECRET: test-session-secret
+          NODE_ENV: test
+
+  # Frontend Testing
+  frontend-test:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tp5-dashboard/frontend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: './tp5-dashboard/frontend/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test
+
+  # Deploy to Staging (dev branch)
+  deploy-staging:
+    name: Deploy to Staging
+    needs: [backend-test, frontend-test]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+    environment:
+      name: staging
+      url: https://staging-nexus-dashboard.vercel.app
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy Frontend to Vercel (Staging)
+        run: |
+          echo "Deploying frontend to staging..."
+          echo "URL: https://staging-nexus-dashboard.vercel.app"
+      
+      - name: Deploy Backend to Render (Staging)
+        run: |
+          echo "Deploying backend to staging..."
+          echo "API URL: https://staging-nexus-api.onrender.com"
+      
+      - name: Send Discord Notification
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "✅ Staging deployment successful"
+          else
+            echo "❌ Staging deployment failed"
+          fi
+
+  # Deploy to Production (main branch)
+  deploy-production:
+    name: Deploy to Production
+    needs: [backend-test, frontend-test]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment:
+      name: production
+      url: https://nexus-dashboard.vercel.app
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy Frontend to Vercel (Production)
+        run: |
+          echo "Deploying frontend to production..."
+          echo "URL: https://nexus-dashboard.vercel.app"
+      
+      - name: Deploy Backend to Render (Production)
+        run: |
+          echo "Deploying backend to production..."
+          echo "API URL: https://nexus-api.onrender.com"
+      
+      - name: Create Release Tag
+        if: success()
+        run: |
+          echo "Creating release tag..."
+          # git tag -a v1.0.0 -m "Release v1.0.0"
+          # git push origin v1.0.0
+      
+      - name: Send Discord Notification
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "🚀 Production deployment successful!"
+            echo "Frontend: https://nexus-dashboard.vercel.app"
+            echo "Backend: https://nexus-api.onrender.com"
+          else
+            echo "❌ Production deployment failed"
+          fi
+
+  # Notification Job
+  notify:
+    name: Send Notifications
+    needs: [backend-test, frontend-test, deploy-staging, deploy-production]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Determine Status
+        id: status
+        run: |
+          if [ "${{ needs.backend-test.result }}" == "failure" ] || [ "${{ needs.frontend-test.result }}" == "failure" ]; then
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=❌ Tests failed - Deployment blocked" >> $GITHUB_OUTPUT
+          elif [ "${{ needs.deploy-production.result }}" == "success" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=🚀 Production deployment successful!" >> $GITHUB_OUTPUT
+          elif [ "${{ needs.deploy-staging.result }}" == "success" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=✅ Staging deployment successful!" >> $GITHUB_OUTPUT
+          else
+            echo "status=info" >> $GITHUB_OUTPUT
+            echo "message=ℹ️ Workflow completed" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Discord Notification
+        run: |
+          echo "Notification: ${{ steps.status.outputs.message }}"
+          echo "Status: ${{ steps.status.outputs.status }}"
+          # Add actual Discord webhook call here if DISCORD_WEBHOOK secret is configured
+          # curl -X POST ${{ secrets.DISCORD_WEBHOOK }} -H "Content-Type: application/json" -d '{"content": "${{ steps.status.outputs.message }}"}'

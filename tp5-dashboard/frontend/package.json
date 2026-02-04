@@ -1,0 +1,21 @@
+{
+    "name": "nexus-dashboard-frontend",
+    "version": "1.0.0",
+    "description": "Frontend for Nexus Dashboard - TP5 Project",
+    "scripts": {
+        "test": "jest",
+        "dev": "lite-server"
+    },
+    "keywords": [
+        "dashboard",
+        "frontend",
+        "tp5"
+    ],
+    "author": "DevOps Team",
+    "license": "MIT",
+    "devDependencies": {
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0",
+        "lite-server": "^2.6.1"
+    }
+}
