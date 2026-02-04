@@ -4,7 +4,7 @@ Ce projet est une démonstration d'intégration et de déploiement continu (CI/C
 
 ## 🔗 Liens
 
-- **URL de déploiement** : [À compléter après déploiement]
+- **URL de déploiement** : [https://HiXaM94.github.io/Git_DevOps_Proj/portfolio/](https://HiXaM94.github.io/Git_DevOps_Proj/portfolio/)
 - **Status CI** : [![TP3 CI/CD](https://github.com/HiXaM94/Git_DevOps_Proj/actions/workflows/tp3-deploy.yml/badge.svg)](https://github.com/HiXaM94/Git_DevOps_Proj/actions/workflows/tp3-deploy.yml)
 
 ## 🛠️ Installation locale
