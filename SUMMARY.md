@@ -300,8 +300,6 @@ Vous avez maintenant un projet **professionnel** et **bien structuré** pour le 
 
 ---
 
-**Bon courage et bon développement ! 💪**
-
 ---
 
 *Projet configuré le : 2026-02-03*  
