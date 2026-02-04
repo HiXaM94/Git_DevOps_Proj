@@ -1,0 +1,53 @@
+name: TP4 Task Manager CI/CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tp4-task-manager/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tp4-task-manager/**'
+
+permissions:
+  contents: write
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tp4-task-manager
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install
+        run: npm install
+
+      - name: Test
+        run: npm test
+
+  deploy:
+    needs: test-and-build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./tp4-task-manager
+          destination_dir: task-manager
+          commit_message: 'deploy: tp4-task-manager update'
