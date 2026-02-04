@@ -1,0 +1,15 @@
+{
+  "name": "tp3-portfolio",
+  "version": "1.0.0",
+  "description": "Projet TP3 CI/CD",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": ["portfolio", "ci-cd"],
+  "author": "DevOps Student",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
