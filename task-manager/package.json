@@ -1,0 +1,22 @@
+{
+    "name": "tp4-task-manager",
+    "version": "1.0.0",
+    "description": "Gestionnaire de tâches collaboratif TP4",
+    "main": "app.js",
+    "scripts": {
+        "test": "jest",
+        "start": "lite-server"
+    },
+    "keywords": [
+        "todo",
+        "manager",
+        "tp4"
+    ],
+    "author": "DevOps Team",
+    "license": "MIT",
+    "devDependencies": {
+        "jest": "^29.0.0",
+        "jest-environment-jsdom": "^29.0.0",
+        "lite-server": "^2.6.1"
+    }
+}
