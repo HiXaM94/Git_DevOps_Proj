@@ -36,6 +36,7 @@ if (typeof document !== 'undefined') {
     // Initialisation
     dateDisplay.textContent = new Date().toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
+    // eslint-disable-next-line no-inner-declarations
     function render() {
         list.innerHTML = '';
         tasks.forEach(task => {
